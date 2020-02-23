@@ -10,7 +10,7 @@ public class SnakeGame extends JFrame {
         initScreen();
     }
     
-    private void initScreen() {
+    protected void initScreen() {
         
         add(new ScreenPanel());
                

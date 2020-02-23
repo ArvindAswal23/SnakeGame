@@ -2,31 +2,31 @@ package org.gaming;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.KeyEventDispatcher;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Scanner;
-
+import java.awt.event.KeyListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class ScreenPanel extends JPanel implements ActionListener {
-	 static JTextField t; 
     private final int SCREEN_WIDTH = 300;
     private final int SCREEN_HEIGHT = 300;
     private final int DOT_ICON_SIZE = 10;
     private final int DOT_ICONS = 900;
     private final int RAND_POS = 29;
     private final int DELAY = 140;
+
     private final int x[] = new int[DOT_ICONS];
     private final int y[] = new int[DOT_ICONS];
 
@@ -41,7 +41,6 @@ public class ScreenPanel extends JPanel implements ActionListener {
     private boolean upDirection = false;
     private boolean downDirection = false;
     private boolean inSnakeGame = true;
-
     private Timer timer;
     private Image snakepart;
     private Image apple;
@@ -124,44 +123,14 @@ public class ScreenPanel extends JPanel implements ActionListener {
             Toolkit.getDefaultToolkit().sync();
 
         } else {
+        	addKeyListener(new tryAgain());
+        	tryAgain t = new tryAgain();
+            t.endGame(g);
+            
 
-            endGame(g);
         }        
     }
-
-    private void endGame(Graphics g) {
-        
-        String msg = "Game Over";
-        String msg1 ="Try Again ? Y/N"; 
-        String Score1 = Integer.toString(score);
-        String Pscore = Integer.toString(pscore);
-        String answer="";
-        Font small = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics metr = getFontMetrics(small);
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(msg, (SCREEN_WIDTH - metr.stringWidth(msg)) / 2, SCREEN_HEIGHT / 2);
-        g.drawString(msg1, (SCREEN_WIDTH - metr.stringWidth(msg)) / 2, (SCREEN_HEIGHT / 2)+10);
-//        Scanner Sc = new Scanner(System.in);
-//        answer = Sc.nextLine();  
-//        Sc.close();
-//        System.out.println(answer);
-      
-        g.drawString("Your Score",10,10);
-        g.drawString(Score1,95,10);
-        g.drawString(Pscore,10,20 );
-        
-           
-        
-    }
     
-    
-    private void tryAgain() {
-    	
-
-    	
-    }
-
     private void findAppleIcon() {
     	
 
@@ -281,6 +250,55 @@ public class ScreenPanel extends JPanel implements ActionListener {
                 rightDirection = false;
                 leftDirection = false;
             }
+            
+            if (key == KeyEvent.VK_P) {
+            	timer.stop();
+
+            	
+            }
+            if (key == KeyEvent.VK_R) {
+            	timer.start();
+         
+            }
+            
         }
     }
+    private class tryAgain extends KeyAdapter{
+    	 @Override
+         public void keyPressed(KeyEvent event) {
+
+             int key = event.getKeyCode();
+             
+             if (key == KeyEvent.VK_Y) {
+             
+            		SnakeGame.main(null);
+                   } 
+             if(key ==  KeyEvent.VK_T) {
+            	 
+            	timer.start();
+             }
+    	 }
+    	 public void endGame(Graphics g) {	
+    	        String msg = "Game Over";
+    	        String msg1 ="Try Again ? Y/N"; 
+    	        String Score1 = Integer.toString(score);
+    	        String Pscore = Integer.toString(pscore);
+    	        Font small = new Font("Helvetica", Font.BOLD, 14);
+    	        FontMetrics metr = getFontMetrics(small);
+    	        g.setColor(Color.white);
+    	        g.setFont(small);
+    	        g.drawString(msg, (SCREEN_WIDTH - metr.stringWidth(msg)) / 2, SCREEN_HEIGHT / 2);
+    	        g.drawString(msg1, (SCREEN_WIDTH - metr.stringWidth(msg)) / 2, (SCREEN_HEIGHT / 2)+10);
+    	        g.drawString("Your Score",10,10);
+    	        g.drawString(Score1,95,10);
+    	        g.drawString(Pscore,10,20 );
+    	 
+    	 }
+    	
+    	
+    	
+    }
+    
+    
+    
 }
